@@ -2446,24 +2446,6 @@ network → portal
 
 <section class="slide" data-section="Close">
   <div class="head">
-    <p class="eyebrow">Take home</p>
-    <h2>Three things</h2>
-  </div>
-  <ul class="points">
-  <li><b>The shape of your app decides the shape of your Terraform.</b> Network, IAM, or a CDN in front of files.</li>
-  <li><b>Provisioning and deploying are different axes.</b> Know where the seam is, and read it from state instead of pasting it.</li>
-  <li><b>Shared infrastructure needs one clear owner.</b></li>
-</ul>
-  <div class="fill">
-  <p class="big">All four stacks run on your laptop for free. Go break something that doesn't cost money.</p>
-</div>
-  <aside class="notes">
-    <p>Put the repo link up on the next slide and leave it there for questions.</p>
-  </aside>
-</section>
-
-<section class="slide" data-section="Close">
-  <div class="head">
     <p class="eyebrow">Run it yourself</p>
     <h2>The repo</h2>
   </div>
@@ -2484,40 +2466,6 @@ network → portal
   <aside class="notes">
     <p>Leave https://github.com/raysapida/terraform_demo on screen for questions. The opening follow-along slide also has a QR code for the same repository.</p>
     <p>Further watching: Better Stack, "This Tool Runs Real AWS Services on Your Laptop For Free (Floci)" — https://youtu.be/7s462S-qRY4 ; AwesomeFOSS, "Floci: The Drop-In LocalStack Replacement That Stays Free Forever" — https://youtu.be/brHYpf4yKKI .</p>
-  </aside>
-</section>
-
-<section class="slide" data-section="Backup">
-  <div class="head">
-    <p class="eyebrow">Backup · for Q&A</p>
-    <h2>Three ways a platform meets Terraform</h2>
-  </div>
-  <div class="cols-3">
-  <div>
-    <h3>The platform is the stack</h3>
-    <p class="small">Vercel, Netlify, Firebase Hosting, Heroku. A <code>git push</code> creates the same hosts, storage and edge, and hides them.</p>
-    <p class="small" style="margin-top:12px"><b>Terraform's job:</b> none.</p>
-  </div>
-  <div>
-    <h3>Terraform manages its settings</h3>
-    <p class="small">Projects, environment variables, domains and DNS records, through the <code>vercel</code>, <code>netlify</code>, <code>cloudflare</code>, <code>render</code> and <code>heroku</code> providers.</p>
-    <p class="small" style="margin-top:12px"><b>Terraform's job:</b> the config around it.</p>
-  </div>
-  <div>
-    <h3>Terraform builds the raw version</h3>
-    <p class="small">The same five nouns as GCP or Azure resources, or a plain server from <code>hcloud</code> or <code>digitalocean</code> for Kamal to deploy to.</p>
-    <p class="small" style="margin-top:12px"><b>Terraform's job:</b> all of it.</p>
-  </div>
-</div>
-  <div class="fill">
-  <p class="big">Same five nouns each time. The only question is who writes them down.</p>
-</div>
-  <aside class="notes">
-    <p>Ask which of these three the room's own setup is. Most will say the first.</p>
-    <p>The first needs no Terraform, but it is every stack from tonight with the resources hidden. Firebase Hosting is stack 1 in a single product.</p>
-    <p>Providers checked in the Terraform registry on 2026-09-30: vercel, netlify, cloudflare, render, heroku, hcloud and digitalocean are partner-maintained; google and azurerm are official. The netlify provider is pre-1.0, and the Fly provider has not been updated since 2023, so do not present it as current.</p>
-    <p>Hetzner or DigitalOcean plus Kamal is the portable version of stack 3: Terraform makes a server and a firewall, and Kamal deploys to its IP.</p>
-    <p>The "no account, no bill" trick tonight is specific to AWS, as far as I know. Other ecosystems have their own local tools (the Firebase emulators, Azurite, wrangler dev), but not a free emulator that accepts Terraform the way Floci does.</p>
   </aside>
 </section>
 </main>

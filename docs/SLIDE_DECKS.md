@@ -9,8 +9,7 @@ In the paired workspace layout, the companion main deck is `../../docs/slides.md
 relative to this document. Apply future presentation updates to both copies and
 rebuild both repositories, preserving their different paths and notes.
 
-This standalone repository contains only the improved main deck: 48 main slides
-and one Q&A backup. It keeps the seven-slide deployment story, four app examples,
+This standalone repository contains only the improved main deck: 47 slides. It keeps the seven-slide deployment story, four app examples,
 two DNS slides, and the shared-connection diagram before the ownership exercise.
 The opening follow-along slide includes the GitHub URL and a QR code.
 There are no dated deck snapshots or deployment-only presentation here.
@@ -33,8 +32,8 @@ and troubleshooting are outside the estimate.
 | Four-stack comparison | 40–41 | 2 |
 | DNS | 42–43 | 2 |
 | Shared-connection diagram, ownership failure and fix | 44–46 | 7 |
-| Takeaways and repository | 47–48 | 2 |
-| **Total target** | | **55** |
+| Repository and questions | 47 | 1 |
+| **Total target** | | **54** |
 
 Run the static-site demo once; its final slide explains the provision/deploy
 split using that run. Keep optional inspections and detailed emulator caveats in

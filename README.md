@@ -138,9 +138,9 @@ make slides    # HTML only, Python 3
 make pptx      # HTML and PowerPoint; installs pinned npm dependencies once
 ```
 
-The deck has 48 main slides and one Q&A backup. Budget approximately 50–60
+The deck has 47 slides. Budget approximately 50–60
 minutes before Q&A, pending rehearsal. [SLIDE_DECKS.md](docs/SLIDE_DECKS.md)
-contains a 55-minute section budget. The deployment-only deck and all dated
+contains a 54-minute section budget. The deployment-only deck and all dated
 backups remain in the original working repository.
 
 ## How this stays off real AWS
