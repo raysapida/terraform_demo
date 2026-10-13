@@ -5,9 +5,14 @@ rebuild both [slides.html](slides.html) and [slides.pptx](slides.pptx).
 `make slides` builds only HTML. Python 3 builds HTML; Node/npm build PowerPoint.
 The first PowerPoint build installs the pinned dependencies in `scripts/pptx/`.
 
+In the paired workspace layout, the companion main deck is `../../docs/slides.md`
+relative to this document. Apply future presentation updates to both copies and
+rebuild both repositories, preserving their different paths and notes.
+
 This standalone repository contains only the improved main deck: 48 main slides
 and one Q&A backup. It keeps the seven-slide deployment story, four app examples,
 two DNS slides, and the shared-connection diagram before the ownership exercise.
+The opening follow-along slide includes the GitHub URL and a QR code.
 There are no dated deck snapshots or deployment-only presentation here.
 
 ## Rehearsal budget
@@ -18,7 +23,7 @@ and troubleshooting are outside the estimate.
 
 | Material | Slides | Target minutes |
 |---|---|---:|
-| Welcome, background, optional setup | 1–3 | 2 |
+| Welcome, repo link/QR, prerequisites, background | 1–3 | 2 |
 | Deployment story | 4–10 | 7 |
 | Two axes, Floci, app roadmap, state | 11–14 | 4 |
 | Static site | 15–22 | 6 |
@@ -36,3 +41,8 @@ split using that run. Keep optional inspections and detailed emulator caveats in
 the notes if time is tight. The ownership exercise lives under
 `stacks/05-shared-ownership/`; make broken/order/fixed run it in teaching order.
 Do not apply its fixed network before the plan-time failure demonstration.
+
+The opening QR slide now includes the Install and Later stacks requirements.
+Participants can run `make prepare` there and leave image downloads running
+during the deployment story. `make up` starts only Floci. First-use package and
+build downloads can still happen later.

@@ -23,6 +23,10 @@ owns both VPCs and is applied before the pipeline and portal stacks.
 
 ## Intentional emulator accommodations
 
+`make prepare` downloads images and starts Floci for attendees. Keep it free of
+Terraform apply and Kamal deployments; the shared-ownership failure needs its
+network absent. `make up` stays a quick Floci-only start.
+
 - Static-site provider stays on `~> 6.0`; 5.100.0 panics on Floci CloudFront.
 - Keep both Lambda function-URL permissions, even though Floci accepts one.
 - Keep the DynamoDB policy scoped to its table, despite Floci's enforcement bug.

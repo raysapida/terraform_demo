@@ -13,7 +13,7 @@ state, emulator data, generated keys, talk-idea projects, or archived decks.
 
 ```bash
 make doctor       # read-only prerequisite check
-make up           # start Floci
+make prepare      # download demo images + start Floci; leave running during the story
 make preflight    # verify the local-only AWS configuration
 make site         # static HTML/CSS/JS: S3 + CloudFront
 make lambda       # Node API: Lambda + DynamoDB
@@ -33,6 +33,22 @@ its expected failure.
 Run one checkout of these demos at a time. The original teaching repository and
 this extract use the same host ports and some Kamal container names. Stop the
 other checkout's services before running these demos.
+
+### Prepare while the talk starts
+
+Run `make prepare` from the opening URL/QR slide and leave that terminal running
+while the deployment story plays. It pulls Floci, starts the emulator, and pulls
+the demos' Lambda, Postgres, Node, and Rails runtime/base images, including the
+registry, proxy, builder, and EC2 image. It does not run Terraform or deploy apps.
+Pulls show progress and stop on the first failure; rerun the command after fixing
+the problem. Already-downloaded image layers are reused.
+
+`make up` remains the quick command for starting only Floci. Preparation downloads
+several images and can take time depending on connection speed and existing
+caches. Terraform providers, npm packages, gems, system packages, and build layers
+can still download on first use; BuildKit has its own cache. This is not a complete
+offline setup. Host tools still need to be installed separately; `make doctor`
+reports missing prerequisites.
 
 ## Requirements
 

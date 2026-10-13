@@ -112,6 +112,7 @@ function inlineRuns(n, base = {}) {
     if (x.t === "br") { out.push({ text: "", br: true }); return; }
     if (x.t === "b" || x.t === "strong") s.bold = true;
     if (x.t === "em") s.italic = true;
+    if (x.t === "a" && /^https?:\/\//.test(x.a.href || "")) s.hyperlink = x.a.href;
     if (x.t === "code") { s.face = MONO; if (st.size) s.size = Math.round(st.size * 0.88 * 10) / 10; }
     if (x.t === "span") {
       if (c.includes("d") || c.includes("c")) s.color = MUTED;
@@ -158,6 +159,7 @@ function pptxRuns(runs, base, para) {
     options: {
       fontFace: r.face || base.fontFace || SANS, fontSize: r.size || base.fontSize, bold: r.bold != null ? r.bold : base.bold,
       italic: r.italic, color: r.color || base.color, ...(r.highlight ? { highlight: r.highlight } : {}),
+      ...(r.hyperlink ? { hyperlink: { url: r.hyperlink } } : {}),
       ...(r.breakLine ? { breakLine: true } : {}), ...(i === 0 && para ? para : {}),
     },
   }));

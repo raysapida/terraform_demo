@@ -5,6 +5,14 @@ FLOCI_NET := playful-programming-terraform-demo_default
 PG_IMAGE  := postgres:15.17-alpine
 TF        := terraform
 
+# Runtime/base images used by the four app demos. Floci itself comes from Compose.
+# Pulling these warms Docker's image cache; it does not install host tools or
+# Terraform/npm/gem dependencies, and BuildKit maintains a separate build cache.
+PREPARE_IMAGES := public.ecr.aws/lambda/nodejs:22 $(PG_IMAGE) node:24-slim \
+                  ruby:4.0.5-slim docker:29-cli registry:3 \
+                  basecamp/kamal-proxy:v0.9.2 moby/buildkit:buildx-stable-1 \
+                  public.ecr.aws/docker/library/ubuntu:24.04 docker/dockerfile:1
+
 # Layer 3: scrub any inherited AWS identity for every recipe in this file, so a
 # shell with `export AWS_PROFILE=fit` can't leak into a terraform run.
 unexport AWS_PROFILE
@@ -21,7 +29,7 @@ export AWS_DEFAULT_REGION    := us-east-1
 export AWS_ENDPOINT_URL      := http://localhost:4566
 export TF_VAR_db_password ?= demo_password_not_a_real_secret
 
-.PHONY: help doctor up down rails-full stop-rails start-rails destroy-dir clean-site clean-rails clean-lambda clean-tanstack tools-image rails-docker rails-teardown warm verify preflight slides pptx site rails rails-psql lambda tanstack tanstack-build broken fixed order psql clean nuke
+.PHONY: help doctor prepare up down rails-full stop-rails start-rails destroy-dir clean-site clean-rails clean-lambda clean-tanstack tools-image rails-docker rails-teardown warm verify preflight slides pptx site rails rails-psql lambda tanstack tanstack-build broken fixed order psql clean nuke
 
 STACKS := stacks/01-static-site/terraform stacks/02-lambda/terraform stacks/03-rails/terraform stacks/04-tanstack/terraform
 
@@ -29,7 +37,8 @@ help:
 	@echo "Playful Programming deployment demo"
 	@echo
 	@echo "  make doctor    Check this machine has what the stacks need (read-only)"
-	@echo "  make up        Start Floci (local AWS emulator)"
+	@echo "  make prepare   Download demo images + start Floci (attendees: run this first)"
+	@echo "  make up        Start Floci only (quick subsequent start)"
 	@echo "  make preflight Prove nothing here can reach real AWS"
 	@echo "  make verify  Probe what this Floci build actually supports"
 	@echo "  make warm    Pre-pull images and prepare all four app demos"
@@ -56,6 +65,19 @@ help:
 
 doctor:
 	@./scripts/doctor.sh
+
+# Attendee setup: start this at the opening slide and leave it running while
+# the deployment story plays. No Terraform apply or Kamal deployment happens.
+prepare:
+	@echo "═══ Download Floci and start the local emulator ═══"
+	docker compose pull
+	@$(MAKE) --no-print-directory up
+	@set -e; for image in $(PREPARE_IMAGES); do \
+		echo "═══ Download $$image ═══"; \
+		docker pull "$$image"; \
+	done
+	@echo "Images downloaded. Leave Floci running and follow the stack demos."
+	@echo "Terraform providers, app dependencies, and builds can still download files on first use."
 
 up:
 	docker compose up -d

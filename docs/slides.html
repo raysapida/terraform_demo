@@ -323,8 +323,323 @@ td:first-child { font-family: var(--mono); font-size: 15px; color: var(--muted);
   <div class="ribbon" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
 </div>
   <aside class="notes">
-    <p>Welcome. The whole talk runs live against a local AWS emulator. Nobody in this room needs an account to follow along; the repo link is on the last slide.</p>
+    <p>Welcome. The whole talk runs live against a local AWS emulator. Nobody in this room needs an account to follow along; the repo link and QR code are on the next slide.</p>
     <p>The colored bar is the key for every slide: teal is CDN, indigo is network, plum is compute, ochre is data, brick is access and IAM.</p>
+  </aside>
+</section>
+
+<section class="slide" data-section="Opening">
+  <div class="head">
+    <p class="eyebrow">Optional · you can just watch · no AWS account needed</p>
+    <h2>Get the slides and follow along</h2>
+  </div>
+  <p class="big"><a href="https://github.com/raysapida/terraform_demo" style="color:var(--edge);text-underline-offset:0.15em">https://github.com/raysapida/terraform_demo</a></p>
+  <div class="cols">
+  <figure>
+    <svg viewBox="0 0 520 310" role="img" aria-label="QR code linking to https://github.com/raysapida/terraform_demo">
+    <rect x="110" y="0" width="301" height="301" fill="#ffffff"/>
+    <rect x="145" y="35" width="49" height="7" fill="#000000"/>
+    <rect x="208" y="35" width="28" height="7" fill="#000000"/>
+    <rect x="243" y="35" width="7" height="7" fill="#000000"/>
+    <rect x="257" y="35" width="7" height="7" fill="#000000"/>
+    <rect x="278" y="35" width="21" height="7" fill="#000000"/>
+    <rect x="306" y="35" width="7" height="7" fill="#000000"/>
+    <rect x="327" y="35" width="49" height="7" fill="#000000"/>
+    <rect x="145" y="42" width="7" height="7" fill="#000000"/>
+    <rect x="187" y="42" width="7" height="7" fill="#000000"/>
+    <rect x="250" y="42" width="14" height="7" fill="#000000"/>
+    <rect x="271" y="42" width="7" height="7" fill="#000000"/>
+    <rect x="285" y="42" width="14" height="7" fill="#000000"/>
+    <rect x="327" y="42" width="7" height="7" fill="#000000"/>
+    <rect x="369" y="42" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="49" width="7" height="7" fill="#000000"/>
+    <rect x="159" y="49" width="21" height="7" fill="#000000"/>
+    <rect x="187" y="49" width="7" height="7" fill="#000000"/>
+    <rect x="201" y="49" width="14" height="7" fill="#000000"/>
+    <rect x="243" y="49" width="7" height="7" fill="#000000"/>
+    <rect x="257" y="49" width="7" height="7" fill="#000000"/>
+    <rect x="292" y="49" width="14" height="7" fill="#000000"/>
+    <rect x="327" y="49" width="7" height="7" fill="#000000"/>
+    <rect x="341" y="49" width="21" height="7" fill="#000000"/>
+    <rect x="369" y="49" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="56" width="7" height="7" fill="#000000"/>
+    <rect x="159" y="56" width="21" height="7" fill="#000000"/>
+    <rect x="187" y="56" width="7" height="7" fill="#000000"/>
+    <rect x="201" y="56" width="7" height="7" fill="#000000"/>
+    <rect x="222" y="56" width="7" height="7" fill="#000000"/>
+    <rect x="271" y="56" width="7" height="7" fill="#000000"/>
+    <rect x="292" y="56" width="7" height="7" fill="#000000"/>
+    <rect x="313" y="56" width="7" height="7" fill="#000000"/>
+    <rect x="327" y="56" width="7" height="7" fill="#000000"/>
+    <rect x="341" y="56" width="21" height="7" fill="#000000"/>
+    <rect x="369" y="56" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="63" width="7" height="7" fill="#000000"/>
+    <rect x="159" y="63" width="21" height="7" fill="#000000"/>
+    <rect x="187" y="63" width="7" height="7" fill="#000000"/>
+    <rect x="201" y="63" width="7" height="7" fill="#000000"/>
+    <rect x="215" y="63" width="21" height="7" fill="#000000"/>
+    <rect x="243" y="63" width="28" height="7" fill="#000000"/>
+    <rect x="285" y="63" width="21" height="7" fill="#000000"/>
+    <rect x="327" y="63" width="7" height="7" fill="#000000"/>
+    <rect x="341" y="63" width="21" height="7" fill="#000000"/>
+    <rect x="369" y="63" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="70" width="7" height="7" fill="#000000"/>
+    <rect x="187" y="70" width="7" height="7" fill="#000000"/>
+    <rect x="201" y="70" width="7" height="7" fill="#000000"/>
+    <rect x="243" y="70" width="7" height="7" fill="#000000"/>
+    <rect x="271" y="70" width="14" height="7" fill="#000000"/>
+    <rect x="306" y="70" width="14" height="7" fill="#000000"/>
+    <rect x="327" y="70" width="7" height="7" fill="#000000"/>
+    <rect x="369" y="70" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="77" width="49" height="7" fill="#000000"/>
+    <rect x="201" y="77" width="7" height="7" fill="#000000"/>
+    <rect x="215" y="77" width="7" height="7" fill="#000000"/>
+    <rect x="229" y="77" width="7" height="7" fill="#000000"/>
+    <rect x="243" y="77" width="7" height="7" fill="#000000"/>
+    <rect x="257" y="77" width="7" height="7" fill="#000000"/>
+    <rect x="271" y="77" width="7" height="7" fill="#000000"/>
+    <rect x="285" y="77" width="7" height="7" fill="#000000"/>
+    <rect x="299" y="77" width="7" height="7" fill="#000000"/>
+    <rect x="313" y="77" width="7" height="7" fill="#000000"/>
+    <rect x="327" y="77" width="49" height="7" fill="#000000"/>
+    <rect x="201" y="84" width="7" height="7" fill="#000000"/>
+    <rect x="215" y="84" width="14" height="7" fill="#000000"/>
+    <rect x="257" y="84" width="7" height="7" fill="#000000"/>
+    <rect x="278" y="84" width="21" height="7" fill="#000000"/>
+    <rect x="306" y="84" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="91" width="7" height="7" fill="#000000"/>
+    <rect x="159" y="91" width="35" height="7" fill="#000000"/>
+    <rect x="236" y="91" width="14" height="7" fill="#000000"/>
+    <rect x="264" y="91" width="7" height="7" fill="#000000"/>
+    <rect x="278" y="91" width="7" height="7" fill="#000000"/>
+    <rect x="306" y="91" width="7" height="7" fill="#000000"/>
+    <rect x="327" y="91" width="35" height="7" fill="#000000"/>
+    <rect x="159" y="98" width="14" height="7" fill="#000000"/>
+    <rect x="180" y="98" width="7" height="7" fill="#000000"/>
+    <rect x="208" y="98" width="7" height="7" fill="#000000"/>
+    <rect x="236" y="98" width="7" height="7" fill="#000000"/>
+    <rect x="264" y="98" width="7" height="7" fill="#000000"/>
+    <rect x="278" y="98" width="14" height="7" fill="#000000"/>
+    <rect x="306" y="98" width="7" height="7" fill="#000000"/>
+    <rect x="327" y="98" width="14" height="7" fill="#000000"/>
+    <rect x="348" y="98" width="14" height="7" fill="#000000"/>
+    <rect x="369" y="98" width="7" height="7" fill="#000000"/>
+    <rect x="180" y="105" width="91" height="7" fill="#000000"/>
+    <rect x="299" y="105" width="7" height="7" fill="#000000"/>
+    <rect x="313" y="105" width="21" height="7" fill="#000000"/>
+    <rect x="341" y="105" width="7" height="7" fill="#000000"/>
+    <rect x="355" y="105" width="14" height="7" fill="#000000"/>
+    <rect x="152" y="112" width="14" height="7" fill="#000000"/>
+    <rect x="173" y="112" width="7" height="7" fill="#000000"/>
+    <rect x="194" y="112" width="14" height="7" fill="#000000"/>
+    <rect x="215" y="112" width="7" height="7" fill="#000000"/>
+    <rect x="229" y="112" width="14" height="7" fill="#000000"/>
+    <rect x="250" y="112" width="7" height="7" fill="#000000"/>
+    <rect x="264" y="112" width="21" height="7" fill="#000000"/>
+    <rect x="313" y="112" width="21" height="7" fill="#000000"/>
+    <rect x="341" y="112" width="21" height="7" fill="#000000"/>
+    <rect x="369" y="112" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="119" width="7" height="7" fill="#000000"/>
+    <rect x="187" y="119" width="21" height="7" fill="#000000"/>
+    <rect x="222" y="119" width="7" height="7" fill="#000000"/>
+    <rect x="243" y="119" width="21" height="7" fill="#000000"/>
+    <rect x="285" y="119" width="42" height="7" fill="#000000"/>
+    <rect x="348" y="119" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="126" width="7" height="7" fill="#000000"/>
+    <rect x="201" y="126" width="14" height="7" fill="#000000"/>
+    <rect x="222" y="126" width="7" height="7" fill="#000000"/>
+    <rect x="236" y="126" width="7" height="7" fill="#000000"/>
+    <rect x="250" y="126" width="7" height="7" fill="#000000"/>
+    <rect x="271" y="126" width="7" height="7" fill="#000000"/>
+    <rect x="313" y="126" width="7" height="7" fill="#000000"/>
+    <rect x="327" y="126" width="7" height="7" fill="#000000"/>
+    <rect x="355" y="126" width="21" height="7" fill="#000000"/>
+    <rect x="152" y="133" width="7" height="7" fill="#000000"/>
+    <rect x="166" y="133" width="35" height="7" fill="#000000"/>
+    <rect x="215" y="133" width="14" height="7" fill="#000000"/>
+    <rect x="236" y="133" width="42" height="7" fill="#000000"/>
+    <rect x="285" y="133" width="7" height="7" fill="#000000"/>
+    <rect x="299" y="133" width="7" height="7" fill="#000000"/>
+    <rect x="320" y="133" width="14" height="7" fill="#000000"/>
+    <rect x="348" y="133" width="21" height="7" fill="#000000"/>
+    <rect x="145" y="140" width="21" height="7" fill="#000000"/>
+    <rect x="173" y="140" width="7" height="7" fill="#000000"/>
+    <rect x="201" y="140" width="14" height="7" fill="#000000"/>
+    <rect x="250" y="140" width="7" height="7" fill="#000000"/>
+    <rect x="292" y="140" width="7" height="7" fill="#000000"/>
+    <rect x="306" y="140" width="7" height="7" fill="#000000"/>
+    <rect x="320" y="140" width="14" height="7" fill="#000000"/>
+    <rect x="341" y="140" width="21" height="7" fill="#000000"/>
+    <rect x="145" y="147" width="21" height="7" fill="#000000"/>
+    <rect x="173" y="147" width="7" height="7" fill="#000000"/>
+    <rect x="187" y="147" width="7" height="7" fill="#000000"/>
+    <rect x="201" y="147" width="7" height="7" fill="#000000"/>
+    <rect x="222" y="147" width="21" height="7" fill="#000000"/>
+    <rect x="250" y="147" width="7" height="7" fill="#000000"/>
+    <rect x="264" y="147" width="7" height="7" fill="#000000"/>
+    <rect x="285" y="147" width="7" height="7" fill="#000000"/>
+    <rect x="299" y="147" width="28" height="7" fill="#000000"/>
+    <rect x="334" y="147" width="14" height="7" fill="#000000"/>
+    <rect x="369" y="147" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="154" width="28" height="7" fill="#000000"/>
+    <rect x="180" y="154" width="7" height="7" fill="#000000"/>
+    <rect x="201" y="154" width="14" height="7" fill="#000000"/>
+    <rect x="229" y="154" width="7" height="7" fill="#000000"/>
+    <rect x="257" y="154" width="7" height="7" fill="#000000"/>
+    <rect x="271" y="154" width="28" height="7" fill="#000000"/>
+    <rect x="306" y="154" width="7" height="7" fill="#000000"/>
+    <rect x="327" y="154" width="14" height="7" fill="#000000"/>
+    <rect x="348" y="154" width="28" height="7" fill="#000000"/>
+    <rect x="152" y="161" width="42" height="7" fill="#000000"/>
+    <rect x="201" y="161" width="14" height="7" fill="#000000"/>
+    <rect x="222" y="161" width="7" height="7" fill="#000000"/>
+    <rect x="236" y="161" width="7" height="7" fill="#000000"/>
+    <rect x="250" y="161" width="7" height="7" fill="#000000"/>
+    <rect x="271" y="161" width="7" height="7" fill="#000000"/>
+    <rect x="285" y="161" width="14" height="7" fill="#000000"/>
+    <rect x="313" y="161" width="14" height="7" fill="#000000"/>
+    <rect x="334" y="161" width="14" height="7" fill="#000000"/>
+    <rect x="355" y="161" width="14" height="7" fill="#000000"/>
+    <rect x="145" y="168" width="7" height="7" fill="#000000"/>
+    <rect x="159" y="168" width="21" height="7" fill="#000000"/>
+    <rect x="194" y="168" width="28" height="7" fill="#000000"/>
+    <rect x="250" y="168" width="14" height="7" fill="#000000"/>
+    <rect x="278" y="168" width="28" height="7" fill="#000000"/>
+    <rect x="334" y="168" width="28" height="7" fill="#000000"/>
+    <rect x="369" y="168" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="175" width="14" height="7" fill="#000000"/>
+    <rect x="187" y="175" width="7" height="7" fill="#000000"/>
+    <rect x="201" y="175" width="14" height="7" fill="#000000"/>
+    <rect x="222" y="175" width="7" height="7" fill="#000000"/>
+    <rect x="236" y="175" width="21" height="7" fill="#000000"/>
+    <rect x="271" y="175" width="14" height="7" fill="#000000"/>
+    <rect x="292" y="175" width="7" height="7" fill="#000000"/>
+    <rect x="313" y="175" width="14" height="7" fill="#000000"/>
+    <rect x="334" y="175" width="21" height="7" fill="#000000"/>
+    <rect x="145" y="182" width="14" height="7" fill="#000000"/>
+    <rect x="173" y="182" width="7" height="7" fill="#000000"/>
+    <rect x="222" y="182" width="7" height="7" fill="#000000"/>
+    <rect x="250" y="182" width="14" height="7" fill="#000000"/>
+    <rect x="285" y="182" width="28" height="7" fill="#000000"/>
+    <rect x="327" y="182" width="7" height="7" fill="#000000"/>
+    <rect x="348" y="182" width="14" height="7" fill="#000000"/>
+    <rect x="369" y="182" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="189" width="7" height="7" fill="#000000"/>
+    <rect x="159" y="189" width="21" height="7" fill="#000000"/>
+    <rect x="187" y="189" width="14" height="7" fill="#000000"/>
+    <rect x="208" y="189" width="28" height="7" fill="#000000"/>
+    <rect x="243" y="189" width="7" height="7" fill="#000000"/>
+    <rect x="271" y="189" width="14" height="7" fill="#000000"/>
+    <rect x="320" y="189" width="7" height="7" fill="#000000"/>
+    <rect x="334" y="189" width="14" height="7" fill="#000000"/>
+    <rect x="362" y="189" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="196" width="7" height="7" fill="#000000"/>
+    <rect x="180" y="196" width="7" height="7" fill="#000000"/>
+    <rect x="215" y="196" width="14" height="7" fill="#000000"/>
+    <rect x="236" y="196" width="14" height="7" fill="#000000"/>
+    <rect x="257" y="196" width="7" height="7" fill="#000000"/>
+    <rect x="278" y="196" width="28" height="7" fill="#000000"/>
+    <rect x="320" y="196" width="21" height="7" fill="#000000"/>
+    <rect x="348" y="196" width="28" height="7" fill="#000000"/>
+    <rect x="145" y="203" width="7" height="7" fill="#000000"/>
+    <rect x="159" y="203" width="7" height="7" fill="#000000"/>
+    <rect x="173" y="203" width="21" height="7" fill="#000000"/>
+    <rect x="208" y="203" width="28" height="7" fill="#000000"/>
+    <rect x="243" y="203" width="7" height="7" fill="#000000"/>
+    <rect x="264" y="203" width="7" height="7" fill="#000000"/>
+    <rect x="278" y="203" width="7" height="7" fill="#000000"/>
+    <rect x="299" y="203" width="49" height="7" fill="#000000"/>
+    <rect x="369" y="203" width="7" height="7" fill="#000000"/>
+    <rect x="201" y="210" width="42" height="7" fill="#000000"/>
+    <rect x="257" y="210" width="14" height="7" fill="#000000"/>
+    <rect x="278" y="210" width="7" height="7" fill="#000000"/>
+    <rect x="306" y="210" width="14" height="7" fill="#000000"/>
+    <rect x="341" y="210" width="7" height="7" fill="#000000"/>
+    <rect x="355" y="210" width="21" height="7" fill="#000000"/>
+    <rect x="145" y="217" width="49" height="7" fill="#000000"/>
+    <rect x="236" y="217" width="35" height="7" fill="#000000"/>
+    <rect x="285" y="217" width="7" height="7" fill="#000000"/>
+    <rect x="299" y="217" width="21" height="7" fill="#000000"/>
+    <rect x="327" y="217" width="7" height="7" fill="#000000"/>
+    <rect x="341" y="217" width="7" height="7" fill="#000000"/>
+    <rect x="355" y="217" width="14" height="7" fill="#000000"/>
+    <rect x="145" y="224" width="7" height="7" fill="#000000"/>
+    <rect x="187" y="224" width="7" height="7" fill="#000000"/>
+    <rect x="201" y="224" width="7" height="7" fill="#000000"/>
+    <rect x="243" y="224" width="14" height="7" fill="#000000"/>
+    <rect x="264" y="224" width="14" height="7" fill="#000000"/>
+    <rect x="285" y="224" width="7" height="7" fill="#000000"/>
+    <rect x="306" y="224" width="14" height="7" fill="#000000"/>
+    <rect x="341" y="224" width="28" height="7" fill="#000000"/>
+    <rect x="145" y="231" width="7" height="7" fill="#000000"/>
+    <rect x="159" y="231" width="21" height="7" fill="#000000"/>
+    <rect x="187" y="231" width="7" height="7" fill="#000000"/>
+    <rect x="201" y="231" width="14" height="7" fill="#000000"/>
+    <rect x="222" y="231" width="7" height="7" fill="#000000"/>
+    <rect x="243" y="231" width="7" height="7" fill="#000000"/>
+    <rect x="257" y="231" width="7" height="7" fill="#000000"/>
+    <rect x="278" y="231" width="28" height="7" fill="#000000"/>
+    <rect x="313" y="231" width="42" height="7" fill="#000000"/>
+    <rect x="362" y="231" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="238" width="7" height="7" fill="#000000"/>
+    <rect x="159" y="238" width="21" height="7" fill="#000000"/>
+    <rect x="187" y="238" width="7" height="7" fill="#000000"/>
+    <rect x="201" y="238" width="42" height="7" fill="#000000"/>
+    <rect x="250" y="238" width="7" height="7" fill="#000000"/>
+    <rect x="271" y="238" width="7" height="7" fill="#000000"/>
+    <rect x="306" y="238" width="21" height="7" fill="#000000"/>
+    <rect x="341" y="238" width="14" height="7" fill="#000000"/>
+    <rect x="369" y="238" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="245" width="7" height="7" fill="#000000"/>
+    <rect x="159" y="245" width="21" height="7" fill="#000000"/>
+    <rect x="187" y="245" width="7" height="7" fill="#000000"/>
+    <rect x="201" y="245" width="7" height="7" fill="#000000"/>
+    <rect x="215" y="245" width="7" height="7" fill="#000000"/>
+    <rect x="236" y="245" width="7" height="7" fill="#000000"/>
+    <rect x="250" y="245" width="14" height="7" fill="#000000"/>
+    <rect x="271" y="245" width="7" height="7" fill="#000000"/>
+    <rect x="285" y="245" width="7" height="7" fill="#000000"/>
+    <rect x="299" y="245" width="7" height="7" fill="#000000"/>
+    <rect x="327" y="245" width="14" height="7" fill="#000000"/>
+    <rect x="348" y="245" width="7" height="7" fill="#000000"/>
+    <rect x="145" y="252" width="7" height="7" fill="#000000"/>
+    <rect x="187" y="252" width="7" height="7" fill="#000000"/>
+    <rect x="208" y="252" width="28" height="7" fill="#000000"/>
+    <rect x="250" y="252" width="7" height="7" fill="#000000"/>
+    <rect x="271" y="252" width="7" height="7" fill="#000000"/>
+    <rect x="292" y="252" width="14" height="7" fill="#000000"/>
+    <rect x="320" y="252" width="7" height="7" fill="#000000"/>
+    <rect x="341" y="252" width="21" height="7" fill="#000000"/>
+    <rect x="145" y="259" width="49" height="7" fill="#000000"/>
+    <rect x="201" y="259" width="7" height="7" fill="#000000"/>
+    <rect x="222" y="259" width="7" height="7" fill="#000000"/>
+    <rect x="243" y="259" width="14" height="7" fill="#000000"/>
+    <rect x="264" y="259" width="7" height="7" fill="#000000"/>
+    <rect x="299" y="259" width="28" height="7" fill="#000000"/>
+    <rect x="334" y="259" width="7" height="7" fill="#000000"/>
+    <rect x="348" y="259" width="7" height="7" fill="#000000"/>
+    <rect x="362" y="259" width="7" height="7" fill="#000000"/>
+    </svg>
+    <figcaption>Scan for the slides and demo code</figcaption>
+  </figure>
+  <div>
+    <dl class="facts" style="gap:16px">
+      <div class="fact"><dt>Install</dt><dd>Docker (running, Compose v2) · Terraform ≥ 1.5 · AWS CLI</dd></div>
+      <div class="fact"><dt>Later stacks</dt><dd>Stack 3: Ruby 4.0.5 + Bundler, or just watch.</dd></div>
+    </dl>
+    <div class="term" style="margin-top:18px"><span class="p">$</span> git clone https://github.com/raysapida/terraform_demo
+<span class="p">$</span> cd terraform_demo
+<span class="p">$</span> make doctor
+<span class="p">$</span> make prepare</div>
+    <p class="small" style="margin-top:18px">Leave <code>make prepare</code> running while we go through deployment. It starts Floci and downloads the demo images.</p>
+  </div>
+</div>
+  <aside class="notes">
+    <p>About 45 seconds within the opening budget. Show this before the background story so people can scan the QR or open https://github.com/raysapida/terraform_demo, clone the code, and start make prepare. Watching is enough; do not pause for installations.</p>
+    <p>Make up starts only Floci, pulling its image if missing. Make prepare explicitly pulls the Compose image, starts Floci, and pulls the Lambda runtime, Postgres, Node, Ruby, Docker CLI, registry, Kamal proxy, BuildKit, Ubuntu EC2 image, and Dockerfile frontend. Participants can leave it running in a terminal during the deployment story. It does not provision Terraform resources or deploy the apps.</p>
+    <p>Make doctor is read-only and lists missing prerequisites. Every stack needs Docker with Compose v2, Terraform, make, and curl. Stack 1's sync also needs AWS CLI. Stack 3's usual route needs host Ruby 4.0.5 and Bundler, Docker Buildx, SSH tools, and OpenSSL; participants can skip it. Stack 4 uses host Node when available and otherwise node:24-slim.</p>
+    <p>This is image preparation, not a fully offline installation. Terraform providers, npm packages, gems, apt/apk packages, and build layers can still download later. BuildKit has its own cache and can fetch base images again. Download time depends on the connection and existing caches; send make prepare to attendees ahead of the event when possible.</p>
+    <p>Ports must be free: 4566, 7001–7010, 3020, 3443, 2222, and 5555. Tested on macOS with Apple Silicon; Rails is configured for arm64. The QR on the later Floci slide links to Floci itself, not this repository.</p>
   </aside>
 </section>
 
@@ -341,30 +656,6 @@ td:first-child { font-family: var(--mono); font-size: 15px; color: var(--muted);
   </ul>
   <aside class="notes">
     <p>About 30 seconds. I'm a full-stack developer who learned the infrastructure underneath the apps I maintained. Most of my background is Rails and small agency environments. The examples include Rails, but the deployment and infrastructure questions apply to JavaScript too.</p>
-  </aside>
-</section>
-
-<section class="slide" data-section="Following along">
-  <div class="head">
-    <p class="eyebrow">Optional · you can just watch · no AWS account needed</p>
-    <h2>Following along? Start these now</h2>
-  </div>
-  <dl class="facts">
-  <div class="fact"><dt>Install</dt><dd>Docker (running, with Compose v2) · Terraform 1.5 or later · the AWS CLI</dd></div>
-  <div class="fact"><dt>Later stacks</dt><dd>Stack 3 only: Ruby 4.0.5 and Bundler, or just watch that one</dd></div>
-</dl>
-  <div class="term" style="margin-top:24px"><span class="p">$</span> docker pull floci/floci:latest                <span class="p"># 324 MB</span>
-<span class="p">$</span> docker pull public.ecr.aws/lambda/nodejs:22   <span class="p"># 617 MB · stack 2</span>
-<span class="p">$</span> docker pull postgres:15.17-alpine             <span class="p"># 386 MB · the databases</span>
-<span class="p">$</span> docker pull node:24-slim                      <span class="p"># 351 MB · stack 4 build</span>
-<span class="p">$</span> for i in ruby:4.0.5-slim docker:29-cli registry:3 \
-    basecamp/kamal-proxy:v0.9.2 moby/buildkit:buildx-stable-1; do
-  docker pull $i; done                    <span class="p"># stack 3: 1.1 GB</span></div>
-  <aside class="notes">
-    <p>Under a minute. Following along is optional; watching is enough. Downloads can run during the seven-slide deployment story, but do not stop the talk for installations. Send the full prerequisite list before the event if possible.</p>
-    <p>Run make doctor from the repo to see what is missing. Every stack needs Docker with Compose v2, Terraform, make, and curl. Stack 1's sync also needs AWS CLI; stack 3 runs Kamal with host Ruby 4.0.5 and Bundler, plus Docker Buildx. Stack 4 uses host Node if available and otherwise builds in node:24-slim. No AWS account or credentials are needed.</p>
-    <p>Images total roughly 2.8 GB as measured on 2026-10-12, plus provider and package downloads. Ports must be free: 4566, 7001–7010, 3020, 3443, 2222, and 5555. Tested on macOS with Apple Silicon; the Rails builder is configured for arm64.</p>
-    <p>Before presenting: the repo is private until sanitization is resolved. Add a repo link when publication is cleared, or arrange an approved copy ahead of the talk. The QR on the Floci slide is a reference, not the demo repository.</p>
   </aside>
 </section>
 
@@ -2176,6 +2467,7 @@ network → portal
     <p class="eyebrow">Run it yourself</p>
     <h2>The repo</h2>
   </div>
+  <p class="big"><a href="https://github.com/raysapida/terraform_demo" style="color:var(--edge);text-underline-offset:0.15em">https://github.com/raysapida/terraform_demo</a></p>
   <div class="cols">
 <div class="term"><span class="p">$</span> docker compose pull
 <span class="p">$</span> make up
@@ -2187,13 +2479,11 @@ network → portal
   <div class="callout">
     <p class="label">Needs</p>
     <p>Docker with Compose v2, Terraform ≥ 1.5, make and curl. AWS CLI for the static-site demo; Ruby 4.0.5 and Bundler for Rails. Node is optional. No AWS account and no credentials.</p>
-    <p class="label" style="margin-top:10px">Further watching</p>
-    <p class="small">Better Stack, "This Tool Runs Real AWS Services on Your Laptop For Free (Floci)" · youtu.be/7s462S-qRY4</p>
-    <p class="small">AwesomeFOSS, "Floci: The Drop-In LocalStack Replacement That Stays Free Forever" · youtu.be/brHYpf4yKKI</p>
   </div>
 </div>
   <aside class="notes">
-    <p>Add the public repo URL here once the repository is sanitized and made public. It's still private: client and project names aren't scrubbed yet.</p>
+    <p>Leave https://github.com/raysapida/terraform_demo on screen for questions. The opening follow-along slide also has a QR code for the same repository.</p>
+    <p>Further watching: Better Stack, "This Tool Runs Real AWS Services on Your Laptop For Free (Floci)" — https://youtu.be/7s462S-qRY4 ; AwesomeFOSS, "Floci: The Drop-In LocalStack Replacement That Stays Free Forever" — https://youtu.be/brHYpf4yKKI .</p>
   </aside>
 </section>
 
