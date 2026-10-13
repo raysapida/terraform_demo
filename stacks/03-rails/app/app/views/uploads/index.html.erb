@@ -1,0 +1,40 @@
+<% content_for :title, "Playful Programming Rails stack" %>
+
+<main>
+  <h1>Uploads</h1>
+  <p class="lede">A Rails app on a laptop, deployed by Kamal. Rows in RDS Postgres, files in S3, all
+     provisioned by <code>terraform apply</code> against Floci.</p>
+
+  <% if notice %><p class="flash notice"><%= notice %></p><% end %>
+  <% if alert %><p class="flash alert"><%= alert %></p><% end %>
+
+  <%= form_with model: @upload, url: uploads_path, class: "upload" do |f| %>
+    <%= f.file_field :file %>
+    <%= f.submit "Upload" %>
+  <% end %>
+
+  <% if @uploads.any? %>
+    <table>
+      <thead>
+        <tr><th>File</th><th>Size</th><th>S3 key</th><th>Uploaded</th></tr>
+      </thead>
+      <tbody>
+        <% @uploads.each do |upload| %>
+          <tr>
+            <td><%= link_to upload.file.filename, upload.file %></td>
+            <td><%= number_to_human_size(upload.file.byte_size) %></td>
+            <td><code><%= upload.file.key %></code></td>
+            <td><%= time_ago_in_words(upload.created_at) %> ago</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="empty">No uploads yet.</p>
+  <% end %>
+
+  <dl class="wiring">
+    <dt>Bucket</dt>   <dd><code><%= @bucket %></code></dd>
+    <dt>Database</dt> <dd><code><%= @database %></code></dd>
+  </dl>
+</main>

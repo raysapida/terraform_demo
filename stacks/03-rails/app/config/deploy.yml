@@ -1,0 +1,92 @@
+<%
+  # The seam, closed. Every value that describes infrastructure is read from
+  # the Terraform state that created it, at deploy time. Compare the real repo
+  # described in the slides, whose deploy.yml hardcodes a host IP and an RDS hostname
+  # belonging to a different stack.
+  tf = ->(name) { `terraform -chdir=../terraform output -raw #{name}`.strip }
+%>
+service: sacjs-rails
+image: sacjs-rails
+
+# On real AWS: the aws_instance's public IP, from `terraform output`.
+# On the laptop: the stand-in host in ../host (sshd + Docker CLI). Terraform also
+# creates the instance in Floci, but Docker inside it needs extra steps that are
+# not wired up (docs/FINDINGS.md), so Kamal deploys here instead.
+servers:
+  web:
+    hosts:
+      - 127.0.0.1
+    # Kamal puts every app container on its own `kamal` network. This adds
+    # Floci's network too, so the app reaches RDS at the address Terraform
+    # reports and S3 at the `floci` alias. On real AWS, delete it: the VPC and
+    # security groups in ../terraform do this job.
+    options:
+      network: playful-programming-terraform-demo_default
+
+# The stand-in host's SSH is published on 127.0.0.1:2222 (../host/compose.yml).
+# The config file supplies a project-local known_hosts; see
+# ../host/ssh_config.template.
+ssh:
+  user: root
+  port: 2222
+  keys_only: true
+  keys: [ "../host/state/id_ed25519" ]
+  config: [ "../host/state/ssh_config" ]
+
+# A registry on the laptop instead of Docker Hub or ECR: no account, no login,
+# no image of your source code on the internet. Kamal starts it and opens an
+# SSH tunnel so the host can pull.
+registry:
+  server: localhost:5555
+
+builder:
+  arch: arm64
+  # Build on the host, like a real server would. The buildx builder is then
+  # named after this address — kamal-remote-ssh---root-127-0-0-1-2222-local-registry
+  # — rather than a generic local name shared with any other Kamal project.
+  #
+  # Two SSH clients reach it, and neither reads deploy.yml's ssh settings:
+  #   - Docker uses the system ssh binary: `make rails` puts ../host/bin/ssh
+  #     (which adds -F with the demo config) first on PATH.
+  #   - Kamal's registry tunnel for the builder uses only the user and port in
+  #     this URI: `make rails` runs Kamal under a throwaway ssh-agent holding
+  #     the demo key.
+  # So run Kamal through `make rails`, not bare `kamal deploy`.
+  remote: ssh://root@127.0.0.1:2222
+  # Without this, Kamal still builds locally whenever `arch` matches the laptop.
+  local: false
+  # By default Kamal builds from a clean git checkout of the repository root.
+  # This app lives in a subdirectory of a larger repo, so build from here.
+  context: .
+
+# kamal-proxy fronts the app and gives zero-downtime deploys. Plain HTTP on a
+# high port: 80 needs root, and 443 is usually taken on a dev laptop.
+proxy:
+  app_port: 3000
+  healthcheck:
+    path: /up
+  run:
+    http_port: 3020
+    https_port: 3443
+    bind_ips:
+      - 127.0.0.1
+
+env:
+  clear:
+    DB_HOST: <%= tf.("db_host") %>
+    DB_PORT: <%= tf.("db_port") %>
+    DB_NAME: <%= tf.("db_name") %>
+    DB_USER: <%= tf.("db_user") %>
+    S3_BUCKET: <%= tf.("s3_bucket") %>
+    S3_ENDPOINT: http://floci:4566 # Floci only; unset on real AWS
+  # Values come from .kamal/secrets, which also reads them from terraform.
+  secret:
+    - DB_PASSWORD
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - SECRET_KEY_BASE
+
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole --include-password"

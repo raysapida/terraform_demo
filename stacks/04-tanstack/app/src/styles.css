@@ -1,0 +1,46 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font: 17px/1.5 system-ui, sans-serif;
+  color: #1a1a1a;
+}
+
+main {
+  width: min(42rem, calc(100% - 2rem));
+  margin: 4rem auto;
+}
+
+h1 {
+  margin: 0 0 0.25rem;
+}
+
+.lede {
+  color: #555;
+  margin-top: 0;
+}
+
+code {
+  font-size: 0.85em;
+  background: #f0f0f0;
+  padding: 0 0.3em;
+  border-radius: 3px;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.35rem 1rem;
+  margin: 2rem 0;
+}
+
+dt {
+  font-weight: 600;
+}
+
+dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}

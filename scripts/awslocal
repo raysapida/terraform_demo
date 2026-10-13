@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# aws-cli against Floci, safely.
+#
+# Why not AWS_ENDPOINT_URL: that env var needs aws-cli >= 2.13. Older CLIs
+# (2.5.x is still common) IGNORE it and send your commands to REAL AWS. The
+# explicit --endpoint-url flag works on every version.
+set -euo pipefail
+exec aws --endpoint-url "${FLOCI_ENDPOINT:-http://localhost:4566}" \
+  --region "${AWS_DEFAULT_REGION:-us-east-1}" "$@"

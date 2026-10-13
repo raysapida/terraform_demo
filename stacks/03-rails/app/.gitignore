@@ -1,0 +1,12 @@
+/.bundle
+/log/*
+/tmp/*
+/storage/*
+/public/assets
+!/log/.keep
+!/tmp/.keep
+!/storage/.keep
+
+# No credentials file in this app: SECRET_KEY_BASE comes from the environment.
+/config/master.key
+/config/credentials.yml.enc

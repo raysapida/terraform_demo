@@ -1,0 +1,13 @@
+# Rendered by `make rails` into state/ssh_config with absolute paths (OpenSSH
+# does not resolve relative IdentityFile paths against this file's location).
+#
+# Used by Kamal's own SSH (net-ssh, via ssh.config in deploy.yml) and by
+# Docker's remote builder (the system ssh binary, via bin/ssh). Nothing is
+# added to ~/.ssh/config.
+Host 127.0.0.1
+  Port 2222
+  User root
+  IdentityFile @STATE@/id_ed25519
+  IdentitiesOnly yes
+  UserKnownHostsFile @STATE@/known_hosts
+  StrictHostKeyChecking accept-new

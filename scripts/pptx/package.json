@@ -1,0 +1,8 @@
+{
+  "name": "sacjs-slides-pptx",
+  "private": true,
+  "description": "Builds docs/slides.pptx from docs/slides.md. Run through make pptx.",
+  "dependencies": {
+    "pptxgenjs": "4.0.1"
+  }
+}

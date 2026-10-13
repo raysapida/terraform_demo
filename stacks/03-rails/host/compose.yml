@@ -1,0 +1,18 @@
+# Stand-in for the app server. See Dockerfile for why this isn't an EC2 instance.
+#
+# SSH is published on 127.0.0.1:2222 only. The Docker socket mount means the
+# containers Kamal starts here are siblings on the laptop's daemon — the same
+# daemon running Floci, which is how the app can join Floci's network.
+name: sacjs-kamal-host
+
+services:
+  host:
+    build: .
+    container_name: sacjs-kamal-host
+    ports:
+      - "127.0.0.1:2222:22"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./state/id_ed25519.pub:/tmp/authorized_keys:ro
+      - ./state/hostkeys:/etc/ssh/keys
+    restart: unless-stopped

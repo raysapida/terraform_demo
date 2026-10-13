@@ -1,0 +1,22 @@
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>
+
+local:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+
+# The S3 bucket from stacks/03-rails/terraform. Nothing here is a literal:
+# `make rails` reads every value from `terraform output` and passes it in as an
+# environment variable. That's the provisioning → deploying seam, closed.
+amazon:
+  service: S3
+  bucket: <%= ENV["S3_BUCKET"] %>
+  region: <%= ENV.fetch("AWS_REGION", "us-east-1") %>
+  access_key_id: <%= ENV["AWS_ACCESS_KEY_ID"] %>
+  secret_access_key: <%= ENV["AWS_SECRET_ACCESS_KEY"] %>
+  # Only set on Floci. Unset on real AWS, and the SDK uses the real endpoint.
+  <% if ENV["S3_ENDPOINT"].present? %>
+  endpoint: <%= ENV["S3_ENDPOINT"] %>
+  force_path_style: true
+  <% end %>

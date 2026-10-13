@@ -1,0 +1,34 @@
+.floci-data/
+.terraform/
+.terraform-docker/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+.env
+
+# Zipped by the archive provider at plan time.
+.build/
+
+# Stack 3 Kamal host: demo SSH key, host keys, known_hosts, SECRET_KEY_BASE.
+stacks/03-rails/host/state/
+
+# make pptx: installed dependencies and the intermediate slide trees.
+scripts/pptx/node_modules/
+scripts/pptx/.build/
+__pycache__/
+
+# make clean-*: output of a failed terraform destroy.
+.destroy.log
+
+# Keep every state backup, local override, and generated artifact out of Git.
+*.tfstate
+*.tfstate.*
+*.tfvars.json
+*.tfplan
+crash.log
+crash.*.log
+.env.*
+!.env.example
+node_modules/
+.DS_Store

@@ -1,0 +1,432 @@
+<meta charset="utf-8">
+<title>From Git commits to Terraform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* ── Tokens ─────────────────────────────────────────────────────────────────
+   Category colors are the system: every resource on every slide is tinted by
+   what it is. Network, edge, compute, data, access. */
+:root {
+  --ground: #F1F3EF;
+  --surface: #FFFFFF;
+  --ink: #16201C;
+  --muted: #5B6660;
+  --rule: #D3D9D2;
+  --code-bg: #E6EAE4;
+  --network: #4B57C9;
+  --edge: #11807A;
+  --compute: #8A3FA0;
+  --data: #B7791F;
+  --access: #B4442F;
+  --plus: #1F7A4D;
+  --tint: 0.10;
+  --display: "Bricolage Grotesque", "Avenir Next Condensed", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #101614;
+    --surface: #18201D;
+    --ink: #E7ECE8;
+    --muted: #9AA59F;
+    --rule: #2C3733;
+    --code-bg: #1D2723;
+    --network: #8F99F2;
+    --edge: #4FC4BB;
+    --compute: #C58BD9;
+    --data: #E3B15C;
+    --access: #E8826C;
+    --plus: #6BCB94;
+    --tint: 0.16;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #101614;
+  --surface: #18201D;
+  --ink: #E7ECE8;
+  --muted: #9AA59F;
+  --rule: #2C3733;
+  --code-bg: #1D2723;
+  --network: #8F99F2;
+  --edge: #4FC4BB;
+  --compute: #C58BD9;
+  --data: #E3B15C;
+  --access: #E8826C;
+  --plus: #6BCB94;
+  --tint: 0.16;
+}
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--body);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Stage: a fixed 1280×720 canvas scaled to the viewport ───────────────── */
+.viewport {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+.stage {
+  position: relative;
+  width: 1280px;
+  height: 720px;
+  flex: none;
+  transform: scale(var(--scale, 1));
+  transform-origin: center;
+}
+.slide {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  padding: 56px 72px 64px;
+  box-sizing: border-box;
+  background: var(--ground);
+}
+.slide.is-current { display: flex; }
+@media (prefers-reduced-motion: no-preference) {
+  .slide.is-current { animation: enter 220ms ease-out; }
+  @keyframes enter { from { opacity: 0.4; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+}
+
+/* ── Type scale (stage px): 96 / 60 / 40 / 28 / 22 / 18 / 15 ────────────── */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 18px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.eyebrow .chip { color: var(--ground); background: var(--ink); padding: 3px 8px; border-radius: 3px; letter-spacing: 0.06em; }
+h1, h2 {
+  font-family: var(--display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  margin: 0;
+  text-wrap: balance;
+}
+h1 { font-size: 96px; }
+h2 { font-size: 60px; }
+h3 { font-family: var(--display); font-weight: 700; font-size: 28px; margin: 0 0 8px; letter-spacing: -0.01em; }
+p { margin: 0; }
+.lede { font-size: 28px; line-height: 1.4; color: var(--muted); max-width: 30em; text-wrap: pretty; }
+.big { font-size: 40px; line-height: 1.25; font-family: var(--display); font-weight: 500; letter-spacing: -0.01em; text-wrap: balance; max-width: 22em; }
+.small { font-size: 18px; color: var(--muted); line-height: 1.45; }
+code, .mono { font-family: var(--mono); font-size: 0.86em; }
+.ink-edge { color: var(--edge); } .ink-network { color: var(--network); } .ink-compute { color: var(--compute); }
+.ink-data { color: var(--data); } .ink-access { color: var(--access); } .ink-plus { color: var(--plus); }
+
+.head { display: flex; flex-direction: column; gap: 14px; margin-bottom: 30px; }
+.fill { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+.cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; align-items: start; }
+
+/* ── Lists that read like a talk, not a doc ─────────────────────────────── */
+.points { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+.points li { font-size: 26px; line-height: 1.35; padding-left: 28px; position: relative; text-wrap: pretty; }
+.points li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 12px; height: 3px; background: var(--ink); }
+.points.tight li { font-size: 22px; }
+
+/* ── Numbered steps: used only where the order is the information ───────── */
+ol.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; counter-reset: step; }
+ol.steps li { counter-increment: step; display: grid; grid-template-columns: 46px 1fr; align-items: start; font-size: 24px; line-height: 1.35; }
+ol.steps li::before { content: counter(step); font-family: var(--mono); font-size: 17px; font-weight: 600; color: var(--ground); background: var(--ink); width: 30px; height: 30px; border-radius: 3px; display: grid; place-items: center; margin-top: 2px; }
+ol.steps .d { color: var(--muted); }
+
+/* ── App-type slides ─────────────────────────────────────────────────────── */
+.apptype { display: grid; grid-template-columns: 1.15fr 1fr; gap: 64px; flex: 1; min-height: 0; }
+.facts { display: grid; gap: 22px; align-content: start; }
+.fact { display: grid; grid-template-columns: 150px 1fr; gap: 18px; font-size: 22px; line-height: 1.4; border-top: 1px solid var(--rule); padding-top: 14px; }
+.fact dt { font-family: var(--mono); font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 5px; }
+.fact dd { margin: 0; }
+.fact dt.ink-network { color: var(--network); }
+.fact dt.ink-edge { color: var(--edge); }
+.fact dt.ink-compute { color: var(--compute); }
+.fact dt.ink-data { color: var(--data); }
+.fact dt.ink-access { color: var(--access); }
+.stackname { font-size: 100px; line-height: 0.92; }
+.examples { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.examples span { font-family: var(--mono); font-size: 16px; padding: 6px 10px; border: 1px solid var(--rule); border-radius: 4px; color: var(--muted); }
+.examples.known { margin-top: 12px; }
+.examples .lead { border: 0; padding: 6px 4px 6px 0; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
+
+/* ── Resource ledger: terraform plan, grouped by category ───────────────── */
+.ledger { display: grid; grid-auto-flow: column; grid-template-rows: repeat(var(--rows, 9), auto); gap: 6px 48px; align-content: start; }
+.ledger .group { font-family: var(--mono); font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; padding: 12px 0 2px; display: flex; gap: 10px; align-items: center; }
+.ledger .group::before { content: ""; width: 12px; height: 12px; background: currentColor; border-radius: 2px; }
+.ledger .res { font-family: var(--mono); font-size: 18px; line-height: 1.35; display: grid; grid-template-columns: 22px 1fr; }
+.ledger .res::before { content: "+"; color: var(--plus); font-weight: 600; }
+.ledger .res em { font-style: normal; font-family: var(--body); font-size: 16px; color: var(--muted); grid-column: 2; }
+.plan-summary { font-family: var(--mono); font-size: 18px; margin-top: auto; padding-top: 18px; border-top: 1px solid var(--rule); display: flex; gap: 32px; flex-wrap: wrap; }
+.plan-summary b { color: var(--plus); font-weight: 600; }
+
+/* ── Code ───────────────────────────────────────────────────────────────── */
+pre {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 17px;
+  line-height: 1.45;
+  background: var(--code-bg);
+  padding: 22px 26px;
+  border-radius: 6px;
+  overflow: auto;
+  color: var(--ink);
+  tab-size: 2;
+}
+/* Code must read literally: no ligatures (JetBrains Mono turns "<<-" into an arrow). */
+pre, code, .term { font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+/* A ``` code block sits directly in the slide, so give it room above. */
+.slide > * + pre { margin-top: 24px; }
+/* A ``` block shrinks to fit roughly one screen of code (17px for short blocks, down to 11px). */
+pre[style*="--code-lines"] { font-size: clamp(11px, calc(286px / (var(--code-lines) * 1.45)), 17px); }
+pre .c { color: var(--muted); }
+pre .k { color: var(--network); font-weight: 600; }
+pre .s { color: var(--data); }
+pre .hl { background: color-mix(in srgb, var(--plus) 22%, transparent); border-radius: 3px; padding: 0 3px; margin: 0 -3px; }
+.code-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 44px; align-items: start; flex: 1; min-height: 0; }
+.code-grid > pre { max-height: 100%; }
+.callout { display: grid; gap: 20px; }
+.callout p { font-size: 22px; line-height: 1.45; text-wrap: pretty; }
+.callout .label { font-family: var(--mono); font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* ── Demo & edges ───────────────────────────────────────────────────────── */
+.term {
+  font-family: var(--mono);
+  font-size: 19px;
+  line-height: 1.55;
+  background: var(--ink);
+  color: var(--ground);
+  padding: 22px 26px;
+  border-radius: 6px;
+  white-space: pre;
+  overflow: auto;
+}
+.term .p { color: color-mix(in srgb, var(--ground) 55%, transparent); }
+.term .ok { color: color-mix(in srgb, var(--plus) 70%, var(--ground)); }
+.edges { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+.edges li { display: grid; grid-template-columns: 110px 1fr; gap: 16px; font-size: 20px; line-height: 1.4; align-items: baseline; }
+.tag { font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 7px; border-radius: 3px; text-align: center; border: 1px solid currentColor; }
+.tag.real { color: var(--plus); }
+.tag.edge-case { color: var(--access); }
+
+/* ── Diagrams ───────────────────────────────────────────────────────────── */
+figure { margin: 0; display: flex; flex-direction: column; gap: 14px; flex: 1; min-height: 0; }
+figure svg { width: 100%; height: 100%; flex: 1; min-height: 0; color: var(--ink); overflow: visible; }
+figcaption { font-size: 19px; color: var(--muted); line-height: 1.4; max-width: 62em; }
+svg text { font-family: var(--body); fill: currentColor; }
+svg .lbl { font-size: 20px; font-weight: 600; }
+svg .sub { font-size: 15px; fill: var(--muted); }
+svg .mono { font-family: var(--mono); font-size: 14px; }
+svg .arrow-label { font-family: var(--mono); font-size: 14px; fill: var(--muted); }
+svg .box { stroke-width: 2; }
+svg .b-network { stroke: var(--network); fill: var(--network); fill-opacity: var(--tint); }
+svg .b-edge { stroke: var(--edge); fill: var(--edge); fill-opacity: var(--tint); }
+svg .b-compute { stroke: var(--compute); fill: var(--compute); fill-opacity: var(--tint); }
+svg .b-data { stroke: var(--data); fill: var(--data); fill-opacity: var(--tint); }
+svg .b-access { stroke: var(--access); fill: var(--access); fill-opacity: var(--tint); }
+svg .b-plain { stroke: var(--muted); fill: var(--surface); }
+svg .b-ghost { stroke: var(--muted); fill: none; stroke-dasharray: 6 6; }
+svg .zone { fill: none; stroke-width: 2; }
+svg .wire { stroke: currentColor; stroke-width: 2; fill: none; }
+svg .wire.dash { stroke-dasharray: 6 5; stroke: var(--muted); }
+svg .wire.no { stroke: var(--access); stroke-dasharray: 6 5; }
+
+/* ── Chart ──────────────────────────────────────────────────────────────── */
+.legend { display: flex; gap: 26px; flex-wrap: wrap; font-size: 18px; margin-bottom: 8px; }
+.legend span { display: inline-flex; gap: 8px; align-items: center; }
+.legend span::before { content: ""; width: 14px; height: 14px; border-radius: 2px; background: currentColor; }
+.legend .t { color: var(--ink); }
+svg .grid { stroke: var(--rule); stroke-width: 1; }
+svg .seg-network { fill: var(--network); } svg .seg-edge { fill: var(--edge); } svg .seg-compute { fill: var(--compute); }
+svg .seg-data { fill: var(--data); } svg .seg-access { fill: var(--access); }
+svg .seg-num { font-family: var(--mono); font-size: 16px; font-weight: 600; fill: var(--ground); }
+svg .tick { font-family: var(--mono); font-size: 14px; fill: var(--muted); }
+
+/* ── Tables ─────────────────────────────────────────────────────────────── */
+table { border-collapse: collapse; width: 100%; font-size: 20px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.35; }
+th { font-family: var(--mono); font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+td:first-child { font-family: var(--mono); font-size: 15px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; width: 150px; }
+
+/* ── Title & section slides ─────────────────────────────────────────────── */
+.title-slide { justify-content: space-between; }
+.title-slide h1 { font-size: 96px; max-width: 20ch; }
+.title-meta { display: flex; justify-content: space-between; align-items: end; gap: 40px; }
+.ribbon { display: grid; grid-template-columns: 2fr 9fr 3fr 5fr 5fr; height: 16px; border-radius: 2px; overflow: hidden; width: 460px; }
+.ribbon i:nth-child(1) { background: var(--edge); } .ribbon i:nth-child(2) { background: var(--network); }
+.ribbon i:nth-child(3) { background: var(--compute); } .ribbon i:nth-child(4) { background: var(--data); }
+.ribbon i:nth-child(5) { background: var(--access); }
+.quote { font-family: var(--display); font-weight: 700; font-size: 72px; line-height: 1.05; letter-spacing: -0.02em; max-width: 15ch; text-wrap: balance; }
+
+/* ── Chrome: progress, counter, controls, notes ─────────────────────────── */
+.progress { position: absolute; left: 72px; right: 72px; bottom: 26px; display: flex; gap: 6px; }
+.progress i { flex: var(--n); height: 4px; background: var(--rule); border-radius: 2px; position: relative; overflow: hidden; }
+.progress i b { position: absolute; inset: 0; width: var(--p, 0%); background: var(--ink); }
+.counter { position: absolute; right: 72px; bottom: 38px; font-family: var(--mono); font-size: 13px; color: var(--muted); letter-spacing: 0.06em; }
+.section-name { position: absolute; left: 72px; bottom: 38px; font-family: var(--mono); font-size: 13px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+
+.controls { position: fixed; right: 16px; bottom: 16px; display: flex; gap: 6px; z-index: 5; }
+.controls button {
+  font: 500 13px/1 var(--mono);
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.controls button:hover { color: var(--ink); border-color: var(--muted); }
+.controls button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.notes-panel {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 60px;
+  max-height: 38%;
+  overflow: auto;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 16px 20px;
+  font-size: 16px;
+  line-height: 1.55;
+  z-index: 4;
+  box-shadow: 0 8px 30px color-mix(in srgb, var(--ink) 18%, transparent);
+}
+.notes-panel h4 { margin: 0 0 8px; font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.notes-panel p + p { margin-top: 8px; }
+.slide aside.notes { display: none; }
+</style>
+
+<div class="viewport" id="viewport">
+<main class="stage" id="stage" aria-live="polite">
+{{SLIDES}}
+</main>
+</div>
+
+<div class="controls" role="toolbar" aria-label="Slide controls">
+  <button type="button" id="prev" aria-label="Previous slide">←</button>
+  <button type="button" id="next" aria-label="Next slide">→</button>
+  <button type="button" id="notes-toggle" aria-pressed="false">Notes (N)</button>
+</div>
+<div class="notes-panel" id="notes-panel" hidden>
+  <h4 id="notes-title">Speaker notes</h4>
+  <div id="notes-body"></div>
+</div>
+
+<script>
+(() => {
+  const stage = document.getElementById("stage");
+  const viewport = document.getElementById("viewport");
+  const slides = [...stage.querySelectorAll(".slide")];
+  const notesPanel = document.getElementById("notes-panel");
+  const notesBody = document.getElementById("notes-body");
+  const notesTitle = document.getElementById("notes-title");
+  const notesToggle = document.getElementById("notes-toggle");
+
+  // Group consecutive slides by section for the segmented progress bar.
+  const sections = [];
+  slides.forEach((s, i) => {
+    const name = s.dataset.section;
+    const last = sections[sections.length - 1];
+    if (last && last.name === name) last.indexes.push(i);
+    else sections.push({ name, indexes: [i] });
+  });
+
+  slides.forEach((slide, i) => {
+    const bar = document.createElement("div");
+    bar.className = "progress";
+    bar.setAttribute("aria-hidden", "true");
+    sections.forEach(sec => {
+      const seg = document.createElement("i");
+      seg.style.setProperty("--n", sec.indexes.length);
+      const fill = document.createElement("b");
+      const first = sec.indexes[0], lastIdx = sec.indexes[sec.indexes.length - 1];
+      const pct = i > lastIdx ? 100 : i < first ? 0 : ((i - first + 1) / sec.indexes.length) * 100;
+      fill.style.setProperty("--p", pct + "%");
+      seg.appendChild(fill);
+      bar.appendChild(seg);
+    });
+    const counter = document.createElement("div");
+    counter.className = "counter";
+    counter.textContent = `${i + 1} / ${slides.length}`;
+    const secName = document.createElement("div");
+    secName.className = "section-name";
+    secName.textContent = slide.dataset.section;
+    slide.append(bar, counter, secName);
+  });
+
+  function fit() {
+    const pad = 32;
+    const w = viewport.clientWidth - pad, h = viewport.clientHeight - pad;
+    const scale = Math.min(w / 1280, h / 720);
+    stage.style.setProperty("--scale", scale.toFixed(4));
+  }
+
+  let current = 0;
+  function show(i) {
+    current = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, j) => s.classList.toggle("is-current", j === current));
+    const notes = slides[current].querySelector("aside.notes");
+    notesBody.innerHTML = notes ? notes.innerHTML : "<p>No notes.</p>";
+    notesTitle.textContent = `Speaker notes · ${current + 1} / ${slides.length} · ${slides[current].dataset.section}`;
+    if (location.hash !== `#${current + 1}`) history.replaceState(null, "", `#${current + 1}`);
+  }
+  function toggleNotes(force) {
+    const open = typeof force === "boolean" ? force : notesPanel.hidden;
+    notesPanel.hidden = !open;
+    notesToggle.setAttribute("aria-pressed", String(open));
+  }
+
+  document.addEventListener("keydown", e => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const k = e.key;
+    if (k === "ArrowRight" || k === "PageDown" || k === " ") { e.preventDefault(); show(current + 1); }
+    else if (k === "ArrowLeft" || k === "PageUp") { e.preventDefault(); show(current - 1); }
+    else if (k === "Home") show(0);
+    else if (k === "End") show(slides.length - 1);
+    else if (k === "n" || k === "N") toggleNotes();
+    else if (k === "f" || k === "F") {
+      if (document.fullscreenElement) document.exitFullscreen?.();
+      else document.documentElement.requestFullscreen?.().catch(() => {});
+    }
+  });
+  document.getElementById("prev").addEventListener("click", () => show(current - 1));
+  document.getElementById("next").addEventListener("click", () => show(current + 1));
+  notesToggle.addEventListener("click", () => toggleNotes());
+
+  let touchX = null;
+  viewport.addEventListener("touchstart", e => { touchX = e.touches[0].clientX; }, { passive: true });
+  viewport.addEventListener("touchend", e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 40) show(current + (dx < 0 ? 1 : -1));
+    touchX = null;
+  });
+
+  window.addEventListener("resize", fit);
+  window.addEventListener("hashchange", () => {
+    const n = parseInt(location.hash.slice(1), 10);
+    if (!Number.isNaN(n) && n - 1 !== current) show(n - 1);
+  });
+
+  fit();
+  const start = parseInt(location.hash.slice(1), 10);
+  show(Number.isNaN(start) ? 0 : start - 1);
+})();
+</script>

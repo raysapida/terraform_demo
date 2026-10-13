@@ -1,0 +1,16 @@
+# Key-only root login, like a freshly provisioned cloud host.
+Port 22
+PermitRootLogin prohibit-password
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+AuthorizedKeysFile /root/.ssh/authorized_keys
+
+# Host keys persist in a mounted volume, so rebuilding the container does not
+# change the host's identity and trip known_hosts.
+HostKey /etc/ssh/keys/ssh_host_ed25519_key
+
+# Kamal opens a reverse tunnel so the host can pull from the local registry
+# (registry.server: localhost:5555). Alpine's default config disables this.
+AllowTcpForwarding yes
+
+Subsystem sftp internal-sftp

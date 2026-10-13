@@ -1,0 +1,8 @@
+#!/bin/sh
+# Docker reaches a remote buildx builder by running `ssh ... docker system
+# dial-stdio`, and plain ssh only reads ~/.ssh/config. This wrapper adds the
+# demo's generated config (key, known_hosts) with -F instead, so your personal
+# SSH setup is never edited.
+#
+# `make rails` puts this directory first on PATH for Kamal commands only.
+exec /usr/bin/ssh -F "$(cd "$(dirname "$0")/.." && pwd)/state/ssh_config" "$@"

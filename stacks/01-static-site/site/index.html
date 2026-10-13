@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Playful Programming static site</title>
+  <style>
+    body { font: 18px/1.5 system-ui, sans-serif; max-width: 36rem; margin: 4rem auto; padding: 0 1rem; }
+    code { background: #eee; padding: 0 .25em; }
+  </style>
+</head>
+<body>
+  <h1>Served by a CDN that does not exist</h1>
+  <p>This page is in a private S3 bucket, behind a CloudFront distribution,
+     created by <code>terraform apply</code> — all on a laptop, with no AWS account.</p>
+  <p>Deployed <span id="when"></span>.</p>
+  <script>document.getElementById("when").textContent = document.lastModified;</script>
+</body>
+</html>
