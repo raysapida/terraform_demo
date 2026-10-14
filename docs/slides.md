@@ -414,11 +414,14 @@ eyebrow: 2 / 7 · Libraries and system tools
 <pre><span class="c"># Gemfile: a Ruby dependency</span>
 source "https://rubygems.org"
 gem "mini_magick"</pre>
+<pre style="margin-top:14px"><span class="c"># Aptfile: a system package</span>
+imagemagick</pre>
     <p class="small" style="margin-top:18px">Commit <code>Gemfile</code> and <code>Gemfile.lock</code>, like <code>package.json</code> and its lockfile.</p>
   </div>
   <div class="callout">
     <p>Heroku's Ruby buildpack runs <code>bundle install</code>.</p>
     <p><code>mini_magick</code> is a wrapper. It also needs the <b>ImageMagick</b> program in the environment.</p>
+    <p>If the stack lacked it, an APT buildpack installed the packages listed in an <code>Aptfile</code>.</p>
     <p>A dependency list is only part of what makes an app runnable.</p>
   </div>
 </div>
@@ -426,7 +429,8 @@ gem "mini_magick"</pre>
 ### notes
 
 About 60 seconds. This is an addition to an existing Gemfile. Bundler installs Ruby libraries using the lockfile; a native extension may need compatible binaries or build tools. A system program such as ImageMagick has to be available separately. Whether Heroku supplied it depended on the stack. Keep that boundary as the point; the package manager handles libraries, while the environment supplies system tools.
-Sources: https://devcenter.heroku.com/articles/bundler ; https://github.com/minimagick/minimagick#requirements
+In the classic buildpack flow, one way to supply missing system packages was an additional APT buildpack, run before the Ruby buildpack, with package names listed in an Aptfile. Other dependencies could need a custom buildpack. You usually didn't fix this by logging into a dyno and manually installing packages.
+Sources: https://devcenter.heroku.com/articles/bundler ; https://github.com/minimagick/minimagick#requirements ; https://github.com/heroku/heroku-buildpack-apt
 
 ## 6. On a bare server, those jobs become yours
 section: The road here
