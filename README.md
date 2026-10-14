@@ -52,6 +52,12 @@ reports missing prerequisites.
 
 ## Requirements
 
+Install these first:
+
+- **Docker:** [Docker Desktop](https://docs.docker.com/desktop/) (includes Compose v2 and Buildx)
+- **AWS CLI:** [Installing or updating the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- **Terraform:** [Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+
 | Requirement | Used by |
 |---|---|
 | Docker, running, with Compose v2 | Every stack |
