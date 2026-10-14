@@ -514,12 +514,16 @@ section: The road here
 eyebrow: 6 / 7 · Repeatable runtime and release
 
 <div class="code-grid">
-<pre>FROM node:22-slim
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --omit=dev
+<pre>FROM ruby:4.0.5-slim
+WORKDIR /rails
+RUN apt-get update && apt-get install -y \
+      build-essential libpq-dev imagemagick
+ENV RAILS_ENV=production
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
 COPY . .
-CMD ["node", "server.js"]</pre>
+RUN SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile
+CMD ["bin/rails", "server"]</pre>
   <div class="callout">
     <p><b>Build</b> an image containing the app, runtime, and dependencies.</p>
     <p><b>Push</b> the versioned image to a registry.</p>
@@ -531,6 +535,7 @@ CMD ["node", "server.js"]</pre>
 ### notes
 
 About 75 seconds. Docker moves application environment setup into the image. Kamal coordinates running a new version and switching traffic to it with kamal-proxy. Keep data and secrets outside the image. This does not undo database migrations, patch the host, or create the surrounding network and database. Capistrano remains a reasonable option; keep the trade-off discussion brief here.
+The Dockerfile is simplified for the slide. The apt-get line replaces the Aptfile from the environment slide: ImageMagick for mini_magick, plus the compiler and Postgres headers that native gems such as pg need. Rails 7.1 and later generate a fuller multi-stage Dockerfile that keeps build tools out of the final image and runs as a non-root user; stacks/03-rails/app/Dockerfile is that version. For JavaScript the shape is the same: FROM node, copy package.json and the lockfile, npm ci, copy the code, then start the server.
 
 ## 10. Who creates everything underneath?
 section: The road here
